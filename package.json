@@ -1,0 +1,19 @@
+{
+  "main": "index.js",
+  "name": "indian-express",
+  "version": "0.0.1",
+  "description": "Indian Express",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "server.js": "^1.0.0"
+  }
+}

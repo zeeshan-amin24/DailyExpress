@@ -1,0 +1,138 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+  width: 100%;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+.logo {
+  width: 55px;
+  height: 25px;
+  margin-right: 20px;
+}
+.navbar-brand {
+  font-size: 16px !important;
+}
+nav {
+  font-family: "Poppins", sans-serif !important;
+}
+.news h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+.news {
+  margin-top: 25px;
+}
+.navbar-toggler-icon {
+  font-size: 12px !important;
+  outline: 0 !important;
+  border: 0 !important;
+}
+.navbar-toggler{
+  outline: 0 !important;
+  border: 0 !important;
+}
+.navbar-toggler-icon:focus{
+  outline: 0 !important;
+  border: 0 !important;
+}
+
+.navbar-toggler:focus {
+  outline: none!important;
+  box-shadow: none!important;
+}
+
+.form-control:focus {
+  outline: none!important;
+  box-shadow: none!important;
+}
+@media(max-width: 550px){
+  .navbar-brand{
+    font-size: 14px!important;
+  }
+  .logo{
+    width: 45px;
+    height: 20px;
+  }
+  .news h1 {
+    font-size: 25px;
+
+  }
+}
+@media(max-width: 250px){
+  .navbar-brand{
+    font-size: 10px!important;
+  }
+  .logo{
+    width: 30px;
+    height: 14px;
+  }
+  .navbar-toggler-icon {
+    font-size: 10px !important;
+  }
+  .news h1 {
+    font-size: 20px;
+
+  }
+}
+.card-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  flex-wrap: wrap;
+}
+.card{
+  margin: 10px;
+  height: 375px!important;
+position: relative!important;
+}
+.card-title{
+  font-size: 18px!important;
+}
+
+.read-full-article{
+  position: absolute;
+  bottom: 6px;
+  left: 10px;
+}
+@media(max-width: 350px){
+  .card-title{
+    font-size: 17px!important;
+  }
+  .card{
+    height: 350px!important;
+  }
+  .btn{
+    font-size: 15px!important;
+  }
+}
+@media(max-width: 285px){
+  .card-title{
+    font-size: 15px!important;
+  }
+  .card{
+    height: 300px!important;
+    margin: 5px!important;
+  }
+  .btn{
+    font-size: 14px!important;
+  }
+}
+@media(max-width: 250px){
+  .card-title{
+    font-size: 14px!important;
+  }
+  .card{
+    height: 275px!important;
+  }
+  .btn{
+    font-size: 12px!important;
+  }
+}
