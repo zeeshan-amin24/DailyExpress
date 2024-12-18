@@ -101,6 +101,7 @@ position: relative!important;
   position: absolute;
   bottom: 6px;
   left: 10px;
+    margin-top: 5px!important;
 }
 @media(max-width: 350px){
   .card-title{
