@@ -9,6 +9,7 @@ const worldNewsUrl='https://indianexpress.com/section/world/'
 let trendingNewsUrl='https://indianexpress.com/section/trending/'
 let politicsNewsUrl="https://indianexpress.com/section/political-pulse/"
 let scienceNewsUrl="https://indianexpress.com/section/technology/science/"
+let entertainmentNewsUrl='https://indianexpress.com/section/entertainment/'
 app.set("view engine", "ejs");
 app.use(express.static('public'));   
 
@@ -32,6 +33,33 @@ if(title&&img&&href){
     })
   
     res.render("index" ,{ trendingArticles });
+  })
+
+});
+
+app.get("/entertainment", (req, res) => {
+  let entertainmentArticles=[]
+  axios.get(entertainmentNewsUrl)
+  .then(response=>{
+    let $ =cheerio.load(response.data)
+    $('.myie-nation .myie-articles ').each(function(){
+let title = $(this).find('.myie-img-context  .myie-title').text()
+let img = $(this).find('.myie-snaps a .lazyloading').attr('data-src') 
+let href = $(this).find('.myie-img-context  .myie-title').attr('href')
+
+
+if(title&&img&&href){
+  entertainmentArticles.push({
+    title: title,
+    img: img,
+    href: href
+  })
+}
+
+
+    })
+
+    res.render("entertainment" ,{ entertainmentArticles });
   })
 
 });
@@ -149,7 +177,7 @@ app.get("/science", (req, res) => {
 
       $('.articles').each(function() {
         let title = $(this).find('h2').text();
-        let img = $(this).find('.lazyloading').attr('data-src');
+        let img = $(this).find('img').attr('src');
         let date = $(this).find('.date').text();
         let href = $(this).find('a').attr('href');
 if(title&&img&&href){
