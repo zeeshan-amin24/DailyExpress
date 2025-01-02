@@ -43,20 +43,55 @@
                   </div>
                 </div>
               </nav>
-              
               <div class="card-container">
                 <% entertainmentArticles.forEach(function(article) { %>
-                  <div class="card" style="width: 18rem;">
-                    <img src="<%= article.img %>" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title"><%= article.title %></h5>
-                     
-                      <a href="#" class=" read-full-article btn btn-primary">Read Full Article</a>
-                   
+                <div class="card" style="width: 18rem">
+                  <img src="<%= article.img %>" class="card-img-top" alt="..." />
+                  <div class="card-body">
+                    <h5 class="card-title"><%= article.title %></h5>
+                    <div class="read-full-article-div">
+                      <button
+                        data-src="<%= article.href %>"
+                        data-image-src="<%= article.img %>"
+                        data-title-src = "<%= article.title%>"
+                        class="read-full-article btn btn-primary"
+                        id="button-submit"
+                        target="_blank"
+                      >
+                        Read Full Article
+                      </button>
                     </div>
                   </div>
+                </div>
                 <% }); %>
               </div>
+              <script>
+                window.onload = () => {
+                  document.querySelectorAll("#button-submit").forEach((btn) => {
+                    btn.addEventListener("click", async () => {
+                      let headersList = {
+                        Accept: "*/*",
+                        "Content-Type": "application/json",
+                      };
+          
+                      let bodyContent = JSON.stringify({
+                        url: btn.getAttribute("data-src").toString(),
+                        image_url: btn.getAttribute("data-image-src"),
+                        article_title: btn.getAttribute("data-title-src")
+                      });
+          
+                      let response = await fetch("http://localhost:3000/article", {
+                        method: "POST",
+                        body: bodyContent,
+                        headers: headersList,
+                      });
+          
+                      let data = await response.text();
+                      document.write(data)
+                    });
+                  });
+                };
+              </script>
             </body>
-            </html>
-            
+          </html>
+          
