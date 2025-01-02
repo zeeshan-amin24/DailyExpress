@@ -79,8 +79,7 @@
                         image_url: btn.getAttribute("data-image-src"),
                         article_title: btn.getAttribute("data-title-src")
                       });
-          
-                      let response = await fetch("http://localhost:3000/article", {
+                 let response = await fetch("https://dailyexpress.onrender.com/article", {
                         method: "POST",
                         body: bodyContent,
                         headers: headersList,
