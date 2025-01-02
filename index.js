@@ -1,200 +1,122 @@
-const cheerio = require("cheerio");
-const axios = require("axios");
-const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 3000;
-const indianNewsUrl = "https://indianexpress.com/section/india/";
-const sportsNewsUrl='https://indianexpress.com/section/sports/'
-const worldNewsUrl='https://indianexpress.com/section/world/'
-let trendingNewsUrl='https://indianexpress.com/section/trending/'
-let politicsNewsUrl="https://indianexpress.com/section/political-pulse/"
-let scienceNewsUrl="https://indianexpress.com/section/technology/science/"
-let entertainmentNewsUrl='https://indianexpress.com/section/entertainment/'
-app.set("view engine", "ejs");
-app.use(express.static('public'));   
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Express</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="website icon"
+      href="https://i.ibb.co/Fw3csXz/download-removebg-preview.png"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand active" href="/">Daily Express</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="india"
+                target="_blank"
+                >India</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/world" target="_blank">World</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/politics" target="_blank">Politics</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/sports" target="_blank">Sports</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/science" target="_blank">Science</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/entertainment" target="_blank"
+                >Entertainment</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-app.get("/", (req, res) => {
-  let trendingArticles=[]
-  axios.get(trendingNewsUrl)
-  .then(response=>{
-    let $ =cheerio.load(response.data)
-    $('#trendhome .articles ul li').each(function(){
-let title = $(this).find('div a').text() 
-let img = $(this).find('figure a img').attr('src') 
-let href = $(this).find('div a').attr('href')
-if(title&&img&&href){
-  trendingArticles.push({
-    title: title,
-    img: img,
-    href: href
-  })
-}
+    <div class="card-container">
+      <% trendingArticles.forEach(function(article) { %>
+      <div class="card" style="width: 18rem">
+        <img src="<%= article.img %>" class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="card-title"><%= article.title %></h5>
+          <div class="read-full-article-div">
+            <button
+              data-src="<%= article.href %>"
+              data-image-src="<%= article.img %>"
+              data-title-src = "<%= article.title%>"
+              class="read-full-article btn btn-primary"
+              id="button-submit"
+              target="_blank"
+            >
+              Read Full Article
+            </button>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <script>
+      window.onload = () => {
+        document.querySelectorAll("#button-submit").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            let headersList = {
+              Accept: "*/*",
+              "Content-Type": "application/json",
+            };
 
-    })
-  
-    res.render("index" ,{ trendingArticles });
-  })
+            let bodyContent = JSON.stringify({
+              url: btn.getAttribute("data-src").toString(),
+              image_url: btn.getAttribute("data-image-src"),
+              article_title: btn.getAttribute("data-title-src")
+            });
 
-});
+            let response = await fetch("http://localhost:3000/article", {
+              method: "POST",
+              body: bodyContent,
+              headers: headersList,
+            });
 
-app.get("/entertainment", (req, res) => {
-  let entertainmentArticles=[]
-  axios.get(entertainmentNewsUrl)
-  .then(response=>{
-    let $ =cheerio.load(response.data)
-    $('.myie-nation .myie-articles ').each(function(){
-let title = $(this).find('.myie-img-context  .myie-title').text()
-let img = $(this).find('.myie-snaps a img').attr('data-src') 
-let href = $(this).find('.myie-img-context  .myie-title').attr('href')
-
-
-  entertainmentArticles.push({
-    title: title,
-    img: img,
-    href: href
-  })
-
-
-
-    })
-
-    res.render("entertainment" ,{ entertainmentArticles });
-  })
-
-});
-
-
-app.get('/sports', (req, res)=>{
-  let sportsArticles=[]
-  axios.get(sportsNewsUrl)
-  .then(response=>{
-    let $=cheerio.load(response.data)
-    $('.articles').each(function() {
-      let title = $(this).find('h2').text();
-      let img = $(this).find('img').attr('src')
-      let date = $(this).find('.date').text();
-      let href = $(this).find('a').attr('href');
-if(title&&img&&href){
-  sportsArticles.push({
-    title: title,
-    date: date,
-    img: img,
-    href: href
-  });
-
-}
-    
-   
-    });
-    res.render('sports', { sportsArticles })
-  })
-})
-
-
-app.get("/india", (req, res) => {
-  let indiaArticles = [];
-  axios.get(indianNewsUrl)
-    .then(response => {
-      let $ = cheerio.load(response.data);
-
-      $('.articles').each(function() {
-        let title = $(this).find('h2').text();
-        let img = $(this).find('.lazyloading').attr('data-src');
-        let date = $(this).find('.date').text();
-        let href = $(this).find('a').attr('href');
-if(title&&img&&href){
-  indiaArticles.push({
-    title: title,
-    date: date,
-    img: img,
-    href: href
-  });
-}
-        
-      });
-
-      res.render("india", { indiaArticles });
-    })
-});
-
-app.get('/world', (req, res)=>{
-  const worldArticles=[]
-
-  axios.get(worldNewsUrl)
-  .then(response=>{
-    let $=cheerio.load(response.data)
-    $('#north-east-data ul li').each(function(){
-let title=$(this).find('h3').text()
-let img=$(this).find('a figure img').attr('src')
-let href=$(this).find('a').attr('href')
-if(title&&img&&href){
-  worldArticles.push({
-    title: title,
-    img: img,
-    href: href
-  })
-}
-
-    })
-    res.render('world', { worldArticles})
-  })
-
-})
-
-
-app.get("/politics", (req, res) => {
-  let politicsArticles = [];
-  axios.get(politicsNewsUrl)
-    .then(response => {
-      let $ = cheerio.load(response.data);
-
-      $('.articles').each(function() {
-        let title = $(this).find('h2').text();
-        let img = $(this).find('.lazyloading').attr('data-src');
-        let date = $(this).find('.date').text();
-        let href = $(this).find('a').attr('href');
-if(title&&img&&href){
-  politicsArticles.push({
-    title: title,
-    date: date,
-    img: img,
-    href: href
-  });
-}
-        
-      });
-
-      res.render("politics", { politicsArticles });
-    })
-});
-
-app.get("/science", (req, res) => {
-  let scienceArticles = [];
-  axios.get(scienceNewsUrl)
-    .then(response => {
-      let $ = cheerio.load(response.data);
-
-      $('.articles').each(function() {
-        let title = $(this).find('h2').text();
-        let img = $(this).find('.snaps a img').attr('data-src');
-        let date = $(this).find('.date').text();
-        let href = $(this).find('a').attr('href');
-if(title&&img&&href){
-  scienceArticles.push({
-    title: title,
-    date: date,
-    img: img,
-    href: href
-  });
-}
-
-
-        
-      });
-      res.render("science", { scienceArticles });
-    })
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+            let data = await response.text();
+            document.write(data)
+          });
+        });
+      };
+    </script>
+  </body>
+</html>
