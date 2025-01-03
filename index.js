@@ -45,7 +45,7 @@ app.get("/entertainment", (req, res) => {
     $(".myie-nation .myie-articles ").each(function () {
       let title = $(this).find(".myie-img-context  .myie-title").text();
       let img = $(this).find(".myie-snaps a img").attr("data-src");
-      let href = $(this).find(".myie-img-context  .myie-title").attr("href");
+      let href = $(this).find(".myie-img-context  .myie-title a").attr("href");
 
       entertainmentArticles.push({
         title: title,
