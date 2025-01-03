@@ -22,6 +22,7 @@
     />
   </head>
   <body>
+    <!-- ....nav start... -->
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand active" href="/">Daily Express</a>
@@ -70,53 +71,42 @@
     </nav>
 
     <div class="card-container">
-      <% trendingArticles.forEach(function(article) { %>
+      <% trendingArticles.forEach(function (article) { %>
       <div class="card" style="width: 18rem">
-        <img src="<%= article.img %>" class="card-img-top" alt="..." />
+        <img
+          src="<%= article.img %>"
+          class="card-img-top"
+          alt="Article Image"
+        />
         <div class="card-body">
           <h5 class="card-title"><%= article.title %></h5>
           <div class="read-full-article-div">
-            <button
-              data-src="<%= article.href %>"
-              data-image-src="<%= article.img %>"
-              data-title-src = "<%= article.title%>"
-              class="read-full-article btn btn-primary"
-              id="button-submit"
-              target="_blank"
-            >
-              Read Full Article
-            </button>
+            <form action="/article" method="POST">
+              <input
+                type="hidden"
+                name="image_url"
+                value="<%= article.img %>"
+              />
+              <input
+                type="hidden"
+                name="article_title"
+                value="<%= article.title %>"
+              />
+              <input
+                type="hidden"
+                name="article_url"
+                value="<%= article.href %>"
+              />
+              <div class="read-full-article-div">
+                <button type="submit" class="read-full-article btn btn-primary">
+                  Read Full Article
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
       <% }); %>
     </div>
-    <script>
-      window.onload = () => {
-        document.querySelectorAll("#button-submit").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            let headersList = {
-              Accept: "*/*",
-              "Content-Type": "application/json",
-            };
-
-            let bodyContent = JSON.stringify({
-              url: btn.getAttribute("data-src").toString(),
-              image_url: btn.getAttribute("data-image-src"),
-              article_title: btn.getAttribute("data-title-src")
-            });
-
-            let response = await fetch("http://localhost:3000/article", {
-              method: "POST",
-              body: bodyContent,
-              headers: headersList,
-            });
-
-            let data = await response.text();
-            document.write(data)
-          });
-        });
-      };
-    </script>
   </body>
 </html>
