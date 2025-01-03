@@ -12,10 +12,9 @@ let politicsNewsUrl = "https://indianexpress.com/section/political-pulse/";
 let scienceNewsUrl = "https://indianexpress.com/section/technology/science/";
 let entertainmentNewsUrl = "https://indianexpress.com/section/entertainment/";
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
@@ -174,19 +173,13 @@ app.get("/science", (req, res) => {
 });
 
 app.post("/article", (req, res) => {
-  const options = {
-    method: "GET",
-    url: req.body.url,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
 
+  const { image_url, article_title, article_url } = req.body;
+ 
   axios
-    .request(options)
-    .then(function (response) {
-      const page = response.data;
-      const $ = cheerio.load(page);
+    .get(article_url)
+    .then((response) => {
+      const $ = cheerio.load(response.data);
       $(".osv-ad-class").remove();
       $(".custom_read_button").remove();
       $(".subscription_faq").remove();
@@ -194,24 +187,23 @@ app.post("/article", (req, res) => {
       $("#id_subscription_notifier").remove();
       $("iframe").remove();
       $("img").remove()
-      $("strong").remove()
+    
       $(".ie-adtext").remove()
-       
-      const text = $("div.full-details div#pcl-full-content ")
+      const text = $("div.full-details div#pcl-full-content")
+        
       text.find("a").each(function () {
         const anchorText = $(this).text();  
         $(this).replaceWith(`<span>${anchorText}</span>`); 
       });
-    
-  
       res.render("readnews", {
         content: text,
-        article_image: req.body.image_url,
-      article_title: req.body.article_title
-   
+        article_image: image_url,
+        article_title: article_title, 
       });
-     
     })
+    .catch((error) => {
+      res.status(400).send("Error fetching article");
+    });
 });
 
 app.listen(PORT, () => {
