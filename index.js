@@ -187,7 +187,7 @@ app.post("/article", (req, res) => {
       $("#id_subscription_notifier").remove();
       $("iframe").remove();
       $("img").remove()
-    
+          $("table").remove()
       $(".ie-adtext").remove()
       const text = $("div.full-details div#pcl-full-content")
         
